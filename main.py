@@ -66,7 +66,7 @@ def segment_pdf(pdf_path: str, num_segments: int = 2, output_prefix: str = "segm
     
     # Analyze line positions and whitespace
     line_positions, whitespace_diff = analyze_whitespace(pdf_path)
-    
+
     # Sort whitespace differences 
     whitespace_diff.sort(key=lambda x: x[0])
     
@@ -116,6 +116,11 @@ def segment_pdf(pdf_path: str, num_segments: int = 2, output_prefix: str = "segm
     
     # Open original document
     doc = fitz.open(pdf_path)
+
+    # Check if we have enough segments
+    if len(segment_boundaries) != num_segments + 1:
+        print("Unable to segment PDF into the desired number of segments. we have {} segments and need {}".format(len(segment_boundaries) - 1, num_segments))
+        return
     
     # Segment PDF
     for i in range(num_segments):
